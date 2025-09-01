@@ -11,17 +11,17 @@ class TextToSpeechService {
     await _flutterTts.setVolume(0.8);
     await _flutterTts.setSpeechRate(0.5);
     await _flutterTts.setPitch(1.0);
-    
+
     _isInitialized = true;
   }
 
   static Future<void> speak(String text, Language language) async {
     await initialize();
-    
+
     // Set language for TTS
     String ttsLanguage = _getLanguageCode(language);
     await _flutterTts.setLanguage(ttsLanguage);
-    
+
     await _flutterTts.speak(text);
   }
 
@@ -41,8 +41,10 @@ class TextToSpeechService {
         return 'ja-JP';
       case Language.english:
         return 'en-US';
-      case Language.chinese:
+      case Language.chineseSimplified:
         return 'zh-CN';
+      case Language.chineseTraditional:
+        return 'zh-TW';
       case Language.german:
         return 'de-DE';
       case Language.swedish:

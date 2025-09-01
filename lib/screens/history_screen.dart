@@ -70,7 +70,8 @@ class HistoryScreen extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Clear History'),
-          content: const Text('Are you sure you want to clear all learning history?'),
+          content: const Text(
+              'Are you sure you want to clear all learning history?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -164,7 +165,8 @@ class HistoryScreen extends StatelessWidget {
                   const Divider(),
                   Row(
                     children: [
-                      Icon(Icons.translate, color: Colors.green.shade600, size: 20),
+                      Icon(Icons.translate,
+                          color: Colors.green.shade600, size: 20),
                       const SizedBox(width: 8),
                       Text(
                         'Translation',
@@ -203,48 +205,51 @@ class HistoryScreen extends StatelessWidget {
                   Expanded(
                     child: ListView(
                       controller: scrollController,
-                      children: sentence.words.map((word) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  word.word,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                if (word.pronunciation != null) ...[
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    word.pronunciation!,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey.shade600,
-                                      fontStyle: FontStyle.italic,
+                      children: sentence.words
+                          .map((word) => Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          word.word,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        if (word.pronunciation != null) ...[
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            word.pronunciation!,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey.shade600,
+                                              fontStyle: FontStyle.italic,
+                                            ),
+                                          ),
+                                        ],
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ],
-                            ),
-                            const SizedBox(height: 4),
-                            Text(word.definition, style: const TextStyle(fontSize: 14)),
-                            if (word.examples.isNotEmpty) ...[
-                              const SizedBox(height: 4),
-                              Text(
-                                'Examples: ${word.examples.join(', ')}',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey.shade600,
+                                    const SizedBox(height: 4),
+                                    Text(word.definition,
+                                        style: const TextStyle(fontSize: 14)),
+                                    if (word.examples.isNotEmpty) ...[
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        'Examples: ${word.examples.join(', ')}',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                    ],
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ],
-                        ),
-                      )).toList(),
+                              ))
+                          .toList(),
                     ),
                   ),
                 ],
@@ -283,7 +288,8 @@ class HistoryCard extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.blue.shade100,
                       borderRadius: BorderRadius.circular(12),

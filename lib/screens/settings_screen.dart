@@ -20,7 +20,9 @@ class SettingsScreen extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.all(16.0),
             children: [
-              _buildLanguageSection(context, provider),
+              _buildNativeLanguageSection(context, provider),
+              const SizedBox(height: 24),
+              _buildLearningLanguageSection(context, provider),
               const SizedBox(height: 24),
               _buildCategoriesSection(context, provider),
               const SizedBox(height: 24),
@@ -28,6 +30,144 @@ class SettingsScreen extends StatelessWidget {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildNativeLanguageSection(
+      BuildContext context, AppProvider provider) {
+    return Card(
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.home,
+                  color: Colors.purple.shade600,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'Native Language (Translations)',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.purple.shade600,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8.0,
+              children: Language.values.map((language) {
+                final isSelected = provider.nativeLanguage == language;
+                return FilterChip(
+                  label: Text(language.displayName),
+                  selected: isSelected,
+                  onSelected: (selected) {
+                    if (selected) {
+                      provider.setNativeLanguage(language);
+                    }
+                  },
+                  selectedColor: Colors.purple.shade100,
+                  checkmarkColor: Colors.purple.shade600,
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLearningLanguageSection(
+      BuildContext context, AppProvider provider) {
+    return Card(
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.school,
+                  color: Colors.blue.shade600,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'Learning Language',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue.shade600,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8.0,
+              children: Language.values.map((language) {
+                final isSelected = provider.selectedLanguage == language;
+                return FilterChip(
+                  label: Text(language.displayName),
+                  selected: isSelected,
+                  onSelected: (selected) {
+                    if (selected) {
+                      provider.setSelectedLanguage(language);
+                    }
+                  },
+                  selectedColor: Colors.blue.shade100,
+                  checkmarkColor: Colors.blue.shade600,
+                );
+              }).toList(),
+            ),
+            if (provider.selectedLanguage.isChinese) ...[
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.blue.shade200),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.info_outline,
+                            size: 20, color: Colors.blue.shade600),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Chinese Conversion Available',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue.shade600,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'You can view sentences in both Simplified and Traditional Chinese, and convert between them.',
+                      style: TextStyle(
+                        color: Colors.blue.shade700,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
@@ -115,12 +255,14 @@ class SettingsScreen extends StatelessWidget {
             Wrap(
               spacing: 8.0,
               children: InterestCategory.values.map((category) {
-                final isSelected = provider.selectedCategories.contains(category);
+                final isSelected =
+                    provider.selectedCategories.contains(category);
                 return FilterChip(
                   label: Text(category.getLocalizedName('en')),
                   selected: isSelected,
                   onSelected: (selected) {
-                    final newCategories = List<InterestCategory>.from(provider.selectedCategories);
+                    final newCategories = List<InterestCategory>.from(
+                        provider.selectedCategories);
                     if (selected) {
                       newCategories.add(category);
                     } else {
@@ -175,7 +317,8 @@ class SettingsScreen extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () => _selectTime(context, provider),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 16),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(8),

@@ -14,7 +14,7 @@ class DatabaseService {
 
   static Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'todays_sentence.db');
-    
+
     return await openDatabase(
       path,
       version: 1,
@@ -37,7 +37,7 @@ class DatabaseService {
 
   static Future<void> saveSentenceToHistory(Sentence sentence) async {
     final db = await database;
-    
+
     // Check if sentence already exists
     final existing = await db.query(
       _tableName,
@@ -70,7 +70,7 @@ class DatabaseService {
 
   static Future<List<Sentence>> getHistory({int limit = 50}) async {
     final db = await database;
-    
+
     final List<Map<String, dynamic>> maps = await db.query(
       _tableName,
       orderBy: 'viewedAt DESC',
@@ -97,22 +97,25 @@ class DatabaseService {
 
   static String _encodeWords(List<WordDefinition> words) {
     // Simple JSON-like encoding for words
-    final wordsData = words.map((word) => {
-      'word': word.word,
-      'definition': word.definition,
-      'pronunciation': word.pronunciation ?? '',
-      'examples': word.examples.join('|'),
-    }).toList();
-    
-    return wordsData.map((word) => 
-      '${word['word']}~${word['definition']}~${word['pronunciation']}~${word['examples']}'
-    ).join('###');
+    final wordsData = words
+        .map((word) => {
+              'word': word.word,
+              'definition': word.definition,
+              'pronunciation': word.pronunciation ?? '',
+              'examples': word.examples.join('|'),
+            })
+        .toList();
+
+    return wordsData
+        .map((word) =>
+            '${word['word']}~${word['definition']}~${word['pronunciation']}~${word['examples']}')
+        .join('###');
   }
 
   static List<WordDefinition> _decodeWords(String wordsString) {
     try {
       if (wordsString.isEmpty) return [];
-      
+
       final wordEntries = wordsString.split('###');
       return wordEntries.map((entry) {
         final parts = entry.split('~');
