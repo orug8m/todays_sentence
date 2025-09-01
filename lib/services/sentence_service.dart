@@ -381,4 +381,37 @@ class SentenceService {
       createdAt: DateTime.now(),
     );
   }
+
+  Future<Sentence> getRandomSentence(Language language, List<InterestCategory> categories) async {
+    // Use a different random seed to ensure different sentences
+    final random = Random(DateTime.now().millisecondsSinceEpoch);
+    
+    final languageCode = language.code;
+    final availableCategories = _sentenceDatabase[languageCode]?.keys.toList() ?? [];
+
+    final validCategories = categories
+        .where((cat) => availableCategories.contains(cat.englishName))
+        .map((cat) => cat.englishName)
+        .toList();
+
+    if (validCategories.isEmpty) {
+      validCategories.add(availableCategories.first);
+    }
+
+    final selectedCategory = validCategories[random.nextInt(validCategories.length)];
+    final sentences = _sentenceDatabase[languageCode]![selectedCategory]!;
+    final selectedSentence = sentences[random.nextInt(sentences.length)];
+
+    return Sentence(
+      id: '${DateTime.now().millisecondsSinceEpoch}_${random.nextInt(1000)}',
+      text: selectedSentence['text'],
+      language: languageCode,
+      category: selectedCategory,
+      translation: selectedSentence['translation'],
+      words: (selectedSentence['words'] as List)
+          .map((word) => WordDefinition.fromJson(word))
+          .toList(),
+      createdAt: DateTime.now(),
+    );
+  }
 }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
 import '../models/sentence.dart';
 import 'settings_screen.dart';
+import 'history_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -16,9 +17,25 @@ class HomeScreen extends StatelessWidget {
         foregroundColor: Colors.white,
         actions: [
           IconButton(
+            icon: const Icon(Icons.shuffle),
+            onPressed: () {
+              context.read<AppProvider>().generateNewSentence();
+            },
+            tooltip: 'New Sentence',
+          ),
+          IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
               context.read<AppProvider>().refreshSentence();
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.history),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HistoryScreen()),
+              );
             },
           ),
           IconButton(
@@ -124,6 +141,28 @@ class _SentenceCardState extends State<SentenceCard> {
                       fontSize: 18,
                       height: 1.5,
                     ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Consumer<AppProvider>(
+                        builder: (context, provider, child) {
+                          return ElevatedButton.icon(
+                            onPressed: () {
+                              provider.speakSentence(widget.sentence.text);
+                            },
+                            icon: Icon(provider.isSpeaking ? Icons.stop : Icons.volume_up),
+                            label: Text(provider.isSpeaking ? 'Stop' : 'Listen'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green.shade600,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 20),
                   Center(

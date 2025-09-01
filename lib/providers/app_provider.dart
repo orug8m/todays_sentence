@@ -5,6 +5,8 @@ import '../models/sentence.dart';
 import '../services/settings_service.dart';
 import '../services/sentence_service.dart';
 import '../services/notification_service.dart';
+import '../services/tts_service.dart';
+import '../services/history_service.dart';
 
 class AppProvider with ChangeNotifier {
   final SettingsService _settingsService = SettingsService();
@@ -16,6 +18,8 @@ class AppProvider with ChangeNotifier {
   int _notificationMinute = 0;
   Sentence? _todaysSentence;
   bool _isLoading = false;
+  bool _isSpeaking = false;
+  List<Sentence> _sentenceHistory = [];
 
   // Getters
   Language get selectedLanguage => _selectedLanguage;
@@ -24,6 +28,8 @@ class AppProvider with ChangeNotifier {
   int get notificationMinute => _notificationMinute;
   Sentence? get todaysSentence => _todaysSentence;
   bool get isLoading => _isLoading;
+  bool get isSpeaking => _isSpeaking;
+  List<Sentence> get sentenceHistory => _sentenceHistory;
 
   Future<void> initialize() async {
     _isLoading = true;
@@ -44,6 +50,12 @@ class AppProvider with ChangeNotifier {
 
       // Load today's sentence
       await loadTodaysSentence();
+      
+      // Load sentence history
+      await loadSentenceHistory();
+      
+      // Initialize TTS
+      await TextToSpeechService.initialize();
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -86,6 +98,12 @@ class AppProvider with ChangeNotifier {
         _selectedLanguage,
         _selectedCategories,
       );
+      
+      // Save to history when loaded
+      if (_todaysSentence != null) {
+        await HistoryService.saveSentenceToHistory(_todaysSentence!);
+        await loadSentenceHistory(); // Refresh history
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Error loading today\'s sentence: $e');
@@ -101,6 +119,68 @@ class AppProvider with ChangeNotifier {
     await loadTodaysSentence();
 
     _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> loadSentenceHistory() async {
+    try {
+      _sentenceHistory = await HistoryService.getHistory();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error loading sentence history: $e');
+      }
+    }
+    notifyListeners();
+  }
+
+  Future<void> generateNewSentence() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      _todaysSentence = await _sentenceService.getRandomSentence(
+        _selectedLanguage,
+        _selectedCategories,
+      );
+      
+      if (_todaysSentence != null) {
+        await HistoryService.saveSentenceToHistory(_todaysSentence!);
+        await loadSentenceHistory();
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error generating new sentence: $e');
+      }
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> speakSentence(String text) async {
+    if (_isSpeaking) {
+      await TextToSpeechService.stop();
+      _isSpeaking = false;
+    } else {
+      _isSpeaking = true;
+      notifyListeners();
+      
+      try {
+        await TextToSpeechService.speak(text, _selectedLanguage);
+      } catch (e) {
+        if (kDebugMode) {
+          print('Error speaking sentence: $e');
+        }
+      }
+      
+      _isSpeaking = false;
+    }
+    notifyListeners();
+  }
+
+  Future<void> clearHistory() async {
+    await HistoryService.clearHistory();
+    _sentenceHistory = [];
     notifyListeners();
   }
 }

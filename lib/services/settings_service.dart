@@ -4,6 +4,7 @@ import '../models/interest_category.dart';
 
 class SettingsService {
   static const String _selectedLanguageKey = 'selected_language';
+  static const String _nativeLanguageKey = 'native_language';
   static const String _selectedCategoriesKey = 'selected_categories';
   static const String _notificationTimeKey = 'notification_time';
 
@@ -18,6 +19,20 @@ class SettingsService {
     return Language.values.firstWhere(
       (lang) => lang.code == languageCode,
       orElse: () => Language.english,
+    );
+  }
+
+  Future<void> saveNativeLanguage(Language language) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_nativeLanguageKey, language.code);
+  }
+
+  Future<Language> getNativeLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final languageCode = prefs.getString(_nativeLanguageKey) ?? 'ja';
+    return Language.values.firstWhere(
+      (lang) => lang.code == languageCode,
+      orElse: () => Language.japanese,
     );
   }
 
