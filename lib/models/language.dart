@@ -13,9 +13,9 @@ enum Language {
   final String code;
 
   String get displayName => nativeName;
-  
+
   bool get isChinese => this == chineseSimplified || this == chineseTraditional;
-  
+
   Language get chineseCounterpart {
     if (this == chineseSimplified) return chineseTraditional;
     if (this == chineseTraditional) return chineseSimplified;

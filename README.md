@@ -6,59 +6,137 @@ A new Flutter project.
 
 This project is a starting point for a Flutter application.
 
-# Today's Sentence - 語学学習アプリ
+# Today's Sentence - Language Learning App
 
-多言語対応の語学学習アプリです。毎日異なる短文を表示し、単語の意味や翻訳を学習できます。
+A multilingual language learning application built with Flutter that displays daily sentences with translations, word definitions, and audio pronunciation support.
 
-## 機能
+## Features
 
-- **多言語サポート**: 日本語、英語、中国語、ドイツ語、スウェーデン語
-- **興味別カテゴリ**: 20の興味分野から選択可能
-  - Technology (テクノロジー)
-  - Science (サイエンス)  
-  - Health (健康)
-  - Travel (旅行)
-  - Business (ビジネス)
-  - Sports (スポーツ)
-  - Music (音楽)
-  - Movies (映画)
-  - Books (本)
-  - Nature (自然)
-  - History (歴史)
-  - Art (アート)
-  - Education (教育)
-  - Philosophy (哲学)
-  - Psychology (心理学)
-  - Economics (経済)
-  - Politics (政治)
-  - Environment (環境)
-  - Culture (文化)
-  - Food (料理)
+### 🌍 Multi-language Support
+- **Learning Languages**: English, Japanese, Chinese (Simplified & Traditional), German, Swedish
+- **Native Language Settings**: Separate configuration for translation display
+- **Chinese Conversion**: Automatic conversion between Traditional and Simplified Chinese
 
-- **詳細表示機能**:
-  - 母国語への翻訳
-  - 単語辞書（発音、意味、例文）
-  - Show Detailsボタンで詳細の表示/非表示
+### 📚 Content Categories
+Choose from 20 different interest categories:
+- Technology, Science, Health, Travel, Business
+- Sports, Music, Movies, Books, Nature
+- History, Art, Education, Philosophy, Psychology
+- Economics, Politics, Environment, Culture, Food
 
-- **毎日の通知**: 毎日10時（カスタマイズ可能）に新しい文章をお知らせ
+### 🔧 Core Features
+- **Daily Sentences**: New sentence every day based on selected languages and categories
+- **Smart Translations**: Translations displayed in your native language
+- **Word Dictionary**: Detailed word definitions with pronunciation and examples
+- **Text-to-Speech**: Audio pronunciation for all supported languages
+- **Learning History**: Track your learning progress over time
+- **Push Notifications**: Daily reminders at customizable times
+- **Chinese Variants**: Support for both Simplified and Traditional Chinese with conversion
 
-## 使い方
+### 🎨 User Interface
+- Clean, intuitive Material Design interface
+- Show/hide translation and word details
+- Responsive layout for all screen sizes
+- Dark/light mode support
 
-1. **言語選択**: 学習したい言語を選択
-2. **興味分野選択**: 学びたいトピックを複数選択
-3. **毎日の学習**: 表示された文章を読む
-4. **詳細学習**: "Show Details"ボタンを押して翻訳や単語の詳細を確認
-5. **通知設定**: 好きな時間に通知を設定
+## Screenshots
 
-## 技術仕様
+| Home Screen | Settings | History |
+|------------|----------|---------|
+| Daily sentence display with audio | Language and category selection | Learning progress tracking |
 
-- **フレームワーク**: Flutter 3.x
-- **状態管理**: Provider パターン
-- **ローカルストレージ**: SharedPreferences
-- **通知**: flutter_local_notifications
-- **権限管理**: permission_handler
+## Quick Start
 
-## 依存関係
+### Prerequisites
+- Flutter SDK 3.0 or higher
+- Dart SDK 3.0 or higher
+- Android Studio / VS Code with Flutter plugins
+- Git
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/orug8m/todays_sentence.git
+   cd todays_sentence
+   ```
+
+2. **Install dependencies**
+   ```bash
+   flutter pub get
+   ```
+
+3. **Generate code (JSON serialization)**
+   ```bash
+   dart run build_runner build
+   ```
+
+4. **Run the app**
+   ```bash
+   # For web (recommended for development)
+   flutter run -d chrome
+   
+   # For mobile (requires device/emulator)
+   flutter run -d android
+   flutter run -d ios
+   ```
+
+### Platform-specific Setup
+
+#### Android
+- Minimum SDK: 21 (Android 5.0)
+- Permissions: Notifications, Audio
+
+#### iOS
+- Minimum deployment target: iOS 12.0
+- Permissions: Notifications, Audio
+
+#### Web
+- Supports all modern browsers
+- Some features (notifications, TTS) may have limited functionality
+
+## Configuration
+
+### Language Settings
+1. Open the app and navigate to Settings
+2. Set your **Native Language** (for translations)
+3. Choose your **Learning Language** (for sentences)
+4. Select **Interest Categories** (multiple selection allowed)
+
+### Notifications
+- Default: Daily at 10:00 AM
+- Customizable through Settings screen
+- Requires notification permissions
+
+## Architecture
+
+### Project Structure
+```
+lib/
+├── models/           # Data models (Language, Sentence, etc.)
+├── services/         # Business logic services
+│   ├── sentence_service.dart
+│   ├── settings_service.dart
+│   ├── tts_service.dart
+│   ├── history_service.dart
+│   └── chinese_translation_service.dart
+├── providers/        # State management (Provider pattern)
+├── screens/          # UI screens
+│   ├── home_screen.dart
+│   ├── settings_screen.dart
+│   └── history_screen.dart
+└── main.dart
+```
+
+### Key Technologies
+- **Flutter 3.x**: Cross-platform UI framework
+- **Provider**: State management pattern
+- **SharedPreferences**: Local data persistence
+- **flutter_local_notifications**: Push notifications
+- **flutter_tts**: Text-to-speech functionality
+- **JSON serialization**: Data model serialization
+
+## Dependencies
 
 ```yaml
 dependencies:
@@ -66,62 +144,131 @@ dependencies:
     sdk: flutter
   provider: ^6.1.2
   shared_preferences: ^2.2.2
-  http: ^1.2.0
   flutter_local_notifications: ^17.0.0
+  flutter_tts: ^3.8.3
   permission_handler: ^11.3.1
   json_annotation: ^4.8.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.4.9
+  json_serializable: ^6.7.1
+  flutter_lints: ^3.0.0
 ```
 
-## セットアップ
+## Development
 
-1. リポジトリをクローン
+### Running Tests
 ```bash
-git clone <repository-url>
-cd todays_sentence
+flutter test
 ```
 
-2. 依存関係をインストール
+### Building for Production
+
+#### Web
 ```bash
+flutter build web
+```
+
+#### Android APK
+```bash
+flutter build apk --release
+```
+
+#### iOS
+```bash
+flutter build ios --release
+```
+
+### Adding New Languages
+
+1. Update the `Language` enum in `lib/models/language.dart`
+2. Add sentence data to `_sentenceDatabase` in `lib/services/sentence_service.dart`
+3. Add translation mappings in `_getBasicTranslation` method
+4. Update TTS language codes in `lib/services/tts_service.dart`
+
+### Adding New Categories
+
+1. Update `InterestCategory` enum in `lib/models/interest_category.dart`
+2. Add corresponding sentence data for all supported languages
+3. Update UI strings and icons as needed
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Contribution Guidelines
+- Follow Flutter/Dart style guide
+- Add tests for new features
+- Update documentation
+- Ensure all languages have equivalent content
+
+## Troubleshooting
+
+### Common Issues
+
+**Build errors after cloning**
+```bash
+flutter clean
 flutter pub get
+dart run build_runner build --delete-conflicting-outputs
 ```
 
-3. JSONシリアライゼーションコードを生成
-```bash
-dart run build_runner build
-```
+**Notification not working**
+- Check device notification permissions
+- Verify notification time settings
+- Test on physical device (notifications may not work in simulators)
 
-4. アプリを実行
-```bash
-flutter run
-```
+**TTS not working**
+- Verify device has TTS engine installed
+- Check audio permissions
+- Test with different languages
 
-## 文章データについて
+**Web platform limitations**
+- TTS functionality is limited on web
+- Notifications require user interaction
+- Some mobile-specific features unavailable
 
-現在は事前定義された文章データベースを使用しています。将来的には以下のような外部APIとの連携を検討しています：
+## Roadmap
 
-- ニュースAPI（多言語対応）
-- 教育コンテンツAPI
-- 辞書API
+### Upcoming Features
+- [ ] Cloud synchronization for settings and history
+- [ ] Offline mode with cached content
+- [ ] Learning statistics and progress tracking
+- [ ] Spaced repetition algorithm
+- [ ] Community features and sentence sharing
+- [ ] Integration with external language APIs
+- [ ] Widget support for home screen
+- [ ] Apple Watch / Android Wear support
 
-## プラットフォーム対応
+### Long-term Goals
+- [ ] AI-powered personalized content
+- [ ] Voice recognition for pronunciation practice
+- [ ] Gamification elements
+- [ ] Social learning features
+- [ ] Premium subscription model
 
-- ✅ Android
-- ✅ iOS
-- ✅ Web（制限付き）
+## License
 
-## ライセンス
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-MIT License
+## Acknowledgments
 
-## 貢献
+- Flutter team for the amazing framework
+- Community contributors for language content
+- Open source libraries that made this project possible
 
-プルリクエストやイシューの報告を歓迎します。
+## Support
 
-## 今後の予定
+- 📧 Email: [your-email@example.com]
+- 🐛 Issues: [GitHub Issues](https://github.com/orug8m/todays_sentence/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/orug8m/todays_sentence/discussions)
 
-- [ ] より多くの言語サポート
-- [ ] 学習履歴機能
-- [ ] 音声読み上げ機能
-- [ ] 外部API連携
-- [ ] ユーザー設定のクラウド同期
-- [ ] 学習統計とプログレス表示
+---
+
+**Happy Learning! 📚✨**

@@ -5,8 +5,8 @@ import '../models/sentence.dart';
 import '../services/settings_service.dart';
 import '../services/sentence_service.dart';
 import '../services/notification_service.dart';
+import '../services/database_service.dart';
 import '../services/tts_service.dart';
-import '../services/history_service.dart';
 
 class AppProvider with ChangeNotifier {
   final SettingsService _settingsService = SettingsService();
@@ -75,7 +75,6 @@ class AppProvider with ChangeNotifier {
   Future<void> setNativeLanguage(Language language) async {
     _nativeLanguage = language;
     await _settingsService.saveNativeLanguage(language);
-    await loadTodaysSentence(); // 翻訳を更新するため文章を再読み込み
     notifyListeners();
   }
 
@@ -107,12 +106,11 @@ class AppProvider with ChangeNotifier {
       _todaysSentence = await _sentenceService.getTodaysSentence(
         _selectedLanguage,
         _selectedCategories,
-        _nativeLanguage, // Native languageを渡す
       );
 
       // Save to history when loaded
       if (_todaysSentence != null) {
-        await HistoryService.saveSentenceToHistory(_todaysSentence!);
+        await DatabaseService.saveSentenceToHistory(_todaysSentence!);
         await loadSentenceHistory(); // Refresh history
       }
     } catch (e) {
@@ -135,7 +133,7 @@ class AppProvider with ChangeNotifier {
 
   Future<void> loadSentenceHistory() async {
     try {
-      _sentenceHistory = await HistoryService.getHistory();
+      _sentenceHistory = await DatabaseService.getHistory();
     } catch (e) {
       if (kDebugMode) {
         print('Error loading sentence history: $e');
@@ -152,11 +150,10 @@ class AppProvider with ChangeNotifier {
       _todaysSentence = await _sentenceService.getRandomSentence(
         _selectedLanguage,
         _selectedCategories,
-        _nativeLanguage, // Native languageを渡す
       );
 
       if (_todaysSentence != null) {
-        await HistoryService.saveSentenceToHistory(_todaysSentence!);
+        await DatabaseService.saveSentenceToHistory(_todaysSentence!);
         await loadSentenceHistory();
       }
     } catch (e) {
@@ -191,7 +188,7 @@ class AppProvider with ChangeNotifier {
   }
 
   Future<void> clearHistory() async {
-    await HistoryService.clearHistory();
+    await DatabaseService.clearHistory();
     _sentenceHistory = [];
     notifyListeners();
   }

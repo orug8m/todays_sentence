@@ -152,12 +152,16 @@ class _SentenceCardState extends State<SentenceCard> {
                             onPressed: () {
                               provider.speakSentence(widget.sentence.text);
                             },
-                            icon: Icon(provider.isSpeaking ? Icons.stop : Icons.volume_up),
-                            label: Text(provider.isSpeaking ? 'Stop' : 'Listen'),
+                            icon: Icon(provider.isSpeaking
+                                ? Icons.stop
+                                : Icons.volume_up),
+                            label:
+                                Text(provider.isSpeaking ? 'Stop' : 'Listen'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green.shade600,
                               foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
                             ),
                           );
                         },
@@ -172,12 +176,15 @@ class _SentenceCardState extends State<SentenceCard> {
                           _showDetails = !_showDetails;
                         });
                       },
-                      icon: Icon(_showDetails ? Icons.expand_less : Icons.expand_more),
-                      label: Text(_showDetails ? 'Hide Details' : 'Show Details'),
+                      icon: Icon(
+                          _showDetails ? Icons.expand_less : Icons.expand_more),
+                      label:
+                          Text(_showDetails ? 'Hide Details' : 'Show Details'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue.shade600,
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
                       ),
                     ),
                   ),
@@ -250,9 +257,10 @@ class _SentenceCardState extends State<SentenceCard> {
                         ],
                       ),
                       const SizedBox(height: 12),
-                      ...widget.sentence.words.map((word) => WordDefinitionWidget(
-                        wordDefinition: word,
-                      )),
+                      ...widget.sentence.words
+                          .map((word) => WordDefinitionWidget(
+                                wordDefinition: word,
+                              )),
                     ],
                   ),
                 ),
